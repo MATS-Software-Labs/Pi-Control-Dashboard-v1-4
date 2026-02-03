@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>MATS-OS v1.4.4 - AI-CORE & KERNEL SYNC</title>
+    <style>
+        :root { --neon-green: #0f0; --neon-red: #f00; --bg-black: #050505; --white: #fff; }
+        body { background: var(--bg-black); color: var(--neon-green); font-family: 'Courier New', monospace; padding: 20px; margin: 0; overflow: hidden; }
+        
+        .header { border: 2px solid var(--neon-green); padding: 15px; margin-bottom: 20px; box-shadow: 0 0 15px var(--neon-green); position: relative; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        
+        .btn { 
+            border: 1px solid var(--neon-green); padding: 15px; background: rgba(0, 40, 0, 0.3); 
+            cursor: pointer; position: relative; transition: 0.2s;
+        }
+        .btn:hover { background: rgba(0, 255, 0, 0.1); box-shadow: inset 0 0 10px var(--neon-green); }
+        
+        .ai-badge { position: absolute; top: 5px; right: 5px; font-size: 0.6em; background: var(--neon-green); color: #000; padding: 2px 5px; font-weight: bold; }
+
+        .progress-container { width: 100%; height: 8px; background: #111; margin-top: 10px; border: 1px solid #333; }
+        .progress-bar { width: 0%; height: 100%; background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); transition: width 0.1s linear; }
+
+        #notification-area { position: fixed; top: 20px; right: 20px; z-index: 2000; width: 300px; }
+        .push-msg { 
+            background: var(--white); color: #000; padding: 15px; margin-bottom: 10px; 
+            font-weight: bold; border-left: 5px solid var(--neon-green); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); animation: slideIn 0.4s ease-out;
+        }
+        .push-msg.error { border-left: 5px solid var(--neon-red); }
+
+        @keyframes slideIn { from { transform: translateX(110%); } to { transform: translateX(0); } }
+        .raspberries { font-size: 1.2em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="notification-area"></div>
+
+    <div class="header">
+        <h1>MATS-OS v1.4.4 [AI-KERNEL-INTERFACE]</h1>
+        <div id="clock" style="font-size: 1.2em; margin-bottom: 5px;">SYNCING...</div>
+        <div id="sys-status">CPU: 52.1°C | KERNEL: OPTIMIZED | 2.5M BUFFER: READY</div>
+    </div>
+
+    <div class="grid">
+        <div class="btn" onclick="runAIProcess(1, 3, 'Querying Pi-hole v6.4.1...', 'Pi-hole v6.4.1 is ONLINE ✅', 'DNS Unreachable ❌')">
+            <div class="ai-badge">LIVE MONITOR</div>
+            1) DNS CHECK (v6.4.1)
+            <div class="raspberries">🍓</div>
+            <div class="progress-container"><div id="bar1" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" onclick="runAIProcess(2, 4, 'Analyzing Traffic...', 'Matrix Streaming Stable', 'Stream Glitch detected')">
+            2) LIVE MATRIX
+            <div class="raspberries">🍓🍓</div>
+            <div class="progress-container"><div id="bar2" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" onclick="runAIProcess(3, 2, 'Applying Bypasses...', 'Bypass Active', 'Access Denied')">
+            3) BYPASS (BILD/SPEEDTEST)
+            <div class="raspberries">🍓🍓🍓</div>
+            <div class="progress-container"><div id="bar3" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" onclick="runAIProcess(4, 3, 'Ping Google DNS...', 'Ping: 12ms (Solid)', 'Timeout!')">
+            4) INTERNET WACHHUND
+            <div class="raspberries">🍓🍓🍓🍓</div>
+            <div class="progress-container"><div id="bar4" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" onclick="runAIProcess(5, 6, 'Wiping Cache & Junk...', 'System Clean: 1.2GB freed', 'Update Failed')">
+            <div class="ai-badge">DEEP CLEAN</div>
+            5) SYSTEM UPDATE
+            <div class="raspberries">🍓🍓🍓🍓🍓</div>
+            <div class="progress-container"><div id="bar5" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" onclick="runAIFirewall()">
+            <div class="ai-badge">AI CORE</div>
+            6) KI-FIREWALL & 2.5M SYNC
+            <div class="raspberries">🍓🍓🍓🍓🍓🍓</div>
+            <div class="progress-container"><div id="bar6" class="progress-bar"></div></div>
+        </div>
+
+        <div class="btn" style="color:var(--neon-red)" onclick="showPush('🖕 ADMIN PRANK: SYSTEM OVERRIDE', true)">
+            7) EXTRA TOOLS
+            <div class="raspberries">🍓🍓🍓🍓🍓🍓🍓</div>
+        </div>
+
+        <div class="btn" onclick="window.close()">
+            8) BEENDEN
+            <div class="raspberries">🍓🍓🍓🍓🍓🍓🍓🍓</div>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            now.setHours(now.getHours() + 1); // Sommerzeit-Korrektur 2026
+            document.getElementById('clock').innerText = now.toLocaleTimeString('de-DE') + " | FEB 2026 | GOD MODE";
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function runAIFirewall() {
+            showPush("AI: Synchronizing Pi-hole with 2.5M Buffer...", false);
+            startAnimate(6, 7.5, () => {
+                showPush("AI: DNS Cache flushed. 2.5M Units locked & harmonized. ✅", false);
+            });
+        }
+
+        function runAIProcess(id, sec, initMsg, successMsg, errorMsg) {
+            showPush("AI: " + initMsg, false);
+            startAnimate(id, sec, () => {
+                let success = Math.random() > 0.1; 
+                showPush(success ? successMsg : errorMsg, !success);
+            });
+        }
+
+        function startAnimate(id, seconds, onComplete) {
+            let bar = document.getElementById('bar' + id);
+            bar.style.width = '0%';
+            let start = Date.now();
+            let duration = seconds * 1000;
+
+            let interval = setInterval(() => {
+                let passed = Date.now() - start;
+                let percent = Math.min((passed / duration) * 100, 100);
+                bar.style.width = percent + '%';
+                if (passed >= duration) {
+                    clearInterval(interval);
+                    onComplete();
+                    setTimeout(() => { bar.style.width = '0%'; }, 1000);
+                }
+            }, 50);
+        }
+
+        function showPush(text, isError) {
+            let area = document.getElementById('notification-area');
+            let msg = document.createElement('div');
+            msg.className = 'push-msg' + (isError ? ' error' : '');
+            msg.innerText = text;
+            area.appendChild(msg);
+            setTimeout(() => { 
+                msg.style.opacity = '0'; 
+                setTimeout(() => msg.remove(), 500); 
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
